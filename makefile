@@ -1,6 +1,7 @@
 CXX = g++
 LDDIR = 
 LDFLAGS =
+TESTFLAGS = -lgtest -lgtest_main -lpthread
 INCLDDIR = -Iinclude
 DEBUGFLAGS = -g
 CXXFLAGS = -std=c++17 -pedantic -Wfatal-errors -Wconversion -Wredundant-decls -Wshadow -Wall -Wextra
@@ -13,6 +14,18 @@ SRC = $(shell find $(SRCDIR) -name "*.cpp")
 OBJDIR = obj
 OBJ = $(patsubst $(SRCDIR)/%.cpp, $(OBJDIR)/%.o, $(SRC))
 
+# Configuration de tests unitaires avec GTest
+TESTDIR = tests
+TESTSRC = $(shell find $(TESTDIR) -name "*.cpp")
+TESTOBJ = $(patsubst $(TESTDIR)/%.cpp, $(OBJDIR)/$(TESTDIR)/%.o, $(TESTSRC))
+TESTAPP = bin/run_tests
+
+# On exclut main.o lors de la liaison des tests
+OBJ_NO_MAIN = $(filter-out $(OBJDIR)/main.o, $(OBJ))
+
+.PHONY: all run clean debug doc init test
+
+# Compilation du binaire simple
 all: $(OBJ)
 	@mkdir -p bin
 	$(CXX) $(LDDIR) -o $(APP) $^ $(BINFLAGS) $(CXXFLAGS) $(LDFLAGS)
@@ -21,8 +34,20 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) $(DEBUGFLAGS) -c $(INCLDDIR) $< -o $@
 
+# Compilation du binaire de test avec GTest
+$(OBJDIR)/$(TESTDIR)/%.o: $(TESTDIR)/%.cpp
+	@mkdir -p $(dir $@)
+	$(CXX) $(CXXFLAGS) $(DEBUGFLAGS) $(INCLDDIR) -c $< -o $@
+
+$(TESTAPP): $(OBJ_NO_MAIN) $(TESTOBJ)
+	@mkdir -p bin
+	$(CXX) $(LDDIR) -o $@ $^ $(BINFLAGS) $(CXXFLAGS) $(LDFLAGS) $(TESTFLAGS)
+
 run: 
 	$(APP)
+
+test: $(TESTAPP)
+	$(TESTAPP)
 
 clean:
 	find $(OBJDIR) -type f -name "*.o" -delete
