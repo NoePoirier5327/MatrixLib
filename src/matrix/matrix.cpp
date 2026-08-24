@@ -92,11 +92,9 @@ Matrix Matrix::operator+(const Matrix& m) const {
   }
 
   Matrix result = Matrix(this->width, this->height);
-  
-  for (size_t i = 0; i < this->width; ++i) {
-    for (size_t j = 0; j < this->height; ++j) {
-      result(i, j) = (*this)(i, j) + m(i, j);
-    }
+
+  for (size_t i = 0; i < this->width * this->height; ++i) {
+    result.content[i] = this->content[i] + m.content[i];
   }
 
   return result;

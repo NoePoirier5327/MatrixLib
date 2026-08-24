@@ -15,3 +15,33 @@ TEST(MatrixTest, IsNotEqual) {
 
   EXPECT_FALSE(A == B);
 }
+
+TEST(MatrixTest, SumWithNull) {
+  Matrix A = Matrix(3, 3);
+  Matrix B = Matrix(3, 3);
+
+  for (size_t i = 0; i < A.get_width(); ++i) {
+    for (size_t j = 0; j < A.get_height(); ++j) {
+      A(i, j) = static_cast<double>(i + j);
+    }
+  }
+
+  // A + 0 = A
+  EXPECT_EQ(A + B, A);
+}
+
+TEST(MatrixTest, SumWithNonNull) {
+  Matrix A = Matrix(3, 3);
+  Matrix B = Matrix(3, 3);
+  Matrix C = Matrix(3, 3);
+
+  for (size_t i = 0; i < A.get_width(); ++i) {
+    for (size_t j = 0; j < A.get_height(); ++j) {
+      A(i, j) = static_cast<double>(i+j);
+      B(i, j) = static_cast<double>(i*i);
+      C(i, j) = static_cast<double>((i + j) + (i * i));
+    }
+  }
+
+  EXPECT_EQ(A + B, C);
+}
