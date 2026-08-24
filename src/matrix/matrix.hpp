@@ -101,6 +101,11 @@ class Matrix {
      */
     Matrix operator+(const Matrix& m) const;
 
+    /**
+     * @brief Affiche la matrice courante.
+     */
+    void display() const;
+
   private:
     double *content;
     size_t width;

@@ -61,7 +61,7 @@ bool Matrix::operator==(const Matrix& m) const {
   bool is_equal = true;
 
   for (size_t i = 0; i < this->width * this->height; ++i) {
-    is_equal = (this->content[i] == m.content[i]) | is_equal;
+    is_equal = (this->content[i] == m.content[i]) && is_equal;
   }
 
   return is_equal;
@@ -100,4 +100,16 @@ Matrix Matrix::operator+(const Matrix& m) const {
   }
 
   return result;
+}
+
+void Matrix::display() const {
+  for (size_t i = 0; i < this->width * this->height; ++i) {
+    if (i % this->width == 0) {
+      std::cout << std::endl;
+    }
+
+    std::cout << this->content[i] << " ";
+  }
+
+  std::cout << std::endl;
 }
