@@ -14,6 +14,27 @@ Matrix::Matrix(size_t _width, size_t _height) {
   }
 }
 
+Matrix::Matrix(const Matrix& m) {
+  this->width = m.width;
+  this->height = m.height;
+
+  size_t total_size = m.width * m.height;
+  this->content = new double [total_size];
+  for (size_t i = 0; i < total_size; ++i) {
+    this->content[i] = m.content[i];
+  }
+}
+
+Matrix::Matrix(Matrix&& m) noexcept {
+  this->width = m.width;
+  this->height = m.height;
+  this->content = m.content;
+
+  m.width = 0;
+  m.height = 0;
+  m.content = nullptr;
+}
+
 Matrix::~Matrix() {
   if (this->content != nullptr) {
     delete[] this->content;
@@ -98,6 +119,45 @@ Matrix Matrix::operator+(const Matrix& m) const {
   }
 
   return result;
+}
+
+Matrix& Matrix::operator=(const Matrix& m) {
+  if (this == &m) {
+    return *this;
+  }
+
+  // On créer un nouveau tableau
+  delete[] this->content;
+  size_t total_size = m.width * m.height;
+  this->content = new double [total_size];
+
+  // On copie le tableau en paramètre dans notre nouveau tableau
+  for (size_t i = 0; i < total_size; ++i) {
+    this->content[i] = m.content[i];
+  }
+
+  this->width = m.width;
+  this->height = m.height;
+
+  return *this;
+}
+
+Matrix& Matrix::operator=(Matrix&& m) noexcept {
+  if (this == &m) {
+    return *this;
+  }
+
+  delete[] this->content;
+
+  this->width = m.width;
+  this->height = m.height;
+  this->content = m.content;
+
+  m.width = 0;
+  m.height = 0;
+  m.content = nullptr;
+
+  return *this;
 }
 
 void Matrix::display() const {

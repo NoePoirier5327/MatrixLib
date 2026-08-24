@@ -73,3 +73,17 @@ TEST(MatrixTest, ProductWithIdentity) {
   EXPECT_EQ(A * I, A);
   EXPECT_EQ(I * A, A);
 }
+
+TEST(MatrixTest, AssignMatrices) {
+  Matrix A = Matrix(8, 1);
+  Matrix B = Matrix(5, 19);
+
+  for (size_t i = 0; i < B.get_width(); ++i) {
+    for (size_t j = 0; j < B.get_height(); ++j) {
+      B(i, j) = static_cast<double>((j * 8) * (j * 8));
+    }
+  }
+
+  A = B;
+  EXPECT_EQ(A, B);
+}

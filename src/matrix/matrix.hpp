@@ -20,6 +20,25 @@ class Matrix {
     Matrix(size_t width, size_t height);
 
     /**
+     * @brief Constructeur de copie
+     *
+     * Copie le contenu de la matrice en paramètre pour créer le contenu
+     * de la nouvelle instance.
+     *
+     * @param m Copie cette matrice pour créer une nouvelle instance.
+     */
+    Matrix(const Matrix& m);
+
+    /**
+     * @brief Constructeur de déplacement.
+     *
+     * Transfère le contenu de la matrice en paramètre dans la nouvelle instance.
+     *
+     * @param m Matrice dont le contenu est à transférer.
+     */
+    Matrix(Matrix&& m) noexcept;
+
+    /**
      * @brief Détruit la matrice courante.
      */
     ~Matrix();
@@ -100,6 +119,30 @@ class Matrix {
      * @throw std::invalid_argument si les dimensions ne permettent pas le calcul.
      */
     Matrix operator+(const Matrix& m) const;
+
+    /**
+     * @brief Copie la matrice en paramètre dans la matrice courante.
+     *
+     * Surcharge l'opérateur `=`, la méthode désalloue la matrice courante
+     * et copie le contenu de la matrice en paramètre dans celle courante.
+     *
+     * @param m Matrice à copier.
+     *
+     * @return Référence vers l'instance de la matrice à attribuer.
+     */
+    Matrix& operator=(const Matrix& m);
+
+    /**
+     * @brief Transfère la matrice en paramètre dans la matrice courante.
+     *
+     * Surcharge l'opérateur `=`, la méthode transfère le contenu de la matrice
+     * en paramètre dans la matrice en paramètre.
+     *
+     * @param m Matrice à transférer.
+     *
+     * @return Référence vers l'instance de la matrice à attribuer.
+     */
+    Matrix& operator=(Matrix&& m) noexcept;
 
     /**
      * @brief Affiche la matrice courante.
