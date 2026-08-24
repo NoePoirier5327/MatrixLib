@@ -111,3 +111,13 @@ void Matrix::display() const {
 
   std::cout << std::endl;
 }
+
+Matrix new_identity_matrix(size_t n) {
+  Matrix I = Matrix(n, n);
+
+  for (size_t i = 0; i < n; ++i) {
+    I(i, i) = 1.0f;
+  }
+
+  return I;
+}

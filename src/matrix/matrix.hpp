@@ -112,4 +112,13 @@ class Matrix {
     size_t height;
 };
 
+/**
+ * @brief Créer une matrice identitée de taille n.
+ *
+ * @param n taille de la matrice à créer.
+ *
+ * @return Instance de la matrice identitée.
+ */
+Matrix new_identity_matrix(size_t n);
+
 #endif // !MATRIX_HEADER

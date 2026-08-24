@@ -45,3 +45,31 @@ TEST(MatrixTest, SumWithNonNull) {
 
   EXPECT_EQ(A + B, C);
 }
+
+TEST(MatrixTest, ProductWithNull) {
+  Matrix A = Matrix(4, 4);
+  Matrix B = Matrix(4, 2);
+  Matrix C = Matrix(4, 2);
+
+  for (size_t i = 0; i < B.get_width(); ++i) {
+    for (size_t j = 0; j < B.get_height(); ++j) {
+      B(i, j) = 8;
+    }
+  }
+
+  EXPECT_EQ(A * B, C);
+}
+
+TEST(MatrixTest, ProductWithIdentity) {
+  Matrix A = Matrix(2, 2);
+  Matrix I = new_identity_matrix(2);
+
+  for (size_t i = 0; i < A.get_width(); ++i) {
+    for (size_t j = 0; j < A.get_height(); ++j) {
+      A(i, j) = static_cast<double>(i * i + j);
+    }
+  }
+
+  EXPECT_EQ(A * I, A);
+  EXPECT_EQ(I * A, A);
+}
