@@ -1,6 +1,7 @@
 #include "matrix.hpp"
 
 #include <stdexcept>
+#include <iostream>
 
 Matrix::Matrix(size_t _width, size_t _height) {
   this->width = _width;
@@ -29,11 +30,11 @@ size_t Matrix::get_height() const {
 }
 
 double& Matrix::operator()(size_t x, size_t y) {
-  if (x < this->width) {
+  if (x >= this->width) {
     throw std::out_of_range("X index is out of range.");
   }
 
-  if (y < this->height) {
+  if (y >= this->height) {
     throw std::out_of_range("Y index is out of range.");
   }
 
@@ -41,11 +42,11 @@ double& Matrix::operator()(size_t x, size_t y) {
 }
 
 double Matrix::operator()(size_t x, size_t y) const {
-  if (x < this->width) {
+  if (x >= this->width) {
     throw std::out_of_range("X index is out of range.");
   }
 
-  if (y < this->height) {
+  if (y >= this->height) {
     throw std::out_of_range("Y index is out of range.");
   }
 
@@ -59,10 +60,8 @@ bool Matrix::operator==(const Matrix& m) const {
 
   bool is_equal = true;
 
-  for (size_t i = 0; i < this->width; ++i) {
-    for (size_t j = 0; j < this->height; ++j) {
-      is_equal = ((*this)(i, j) == m(i, j)) | is_equal;
-    }
+  for (size_t i = 0; i < this->width * this->height; ++i) {
+    is_equal = (this->content[i] == m.content[i]) | is_equal;
   }
 
   return is_equal;
