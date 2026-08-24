@@ -70,3 +70,19 @@ Matrix Matrix::operator*(const Matrix& m) const {
 
   return result;
 }
+
+Matrix Matrix::operator+(const Matrix& m) const {
+  if (this->width != m.width || this->height != m.height) {
+    throw std::invalid_argument("Invalid dimensions for matrice sum.");
+  }
+
+  Matrix result = Matrix(this->width, this->height);
+  
+  for (size_t i = 0; i < this->width; ++i) {
+    for (size_t j = 0; j < this->height; ++j) {
+      result(i, j) = (*this)(i, j) + m(i, j);
+    }
+  }
+
+  return result;
+}

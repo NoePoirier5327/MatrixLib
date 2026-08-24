@@ -75,6 +75,21 @@ class Matrix {
      */
     Matrix operator*(const Matrix& m) const;
 
+    /**
+     * @brief Calcul la somme de deux matrices.
+     *
+     * Surcharge l'opérateur `+` pour pouvoir calculer `result = A + B`.
+     * Le calcul se fait entre la matrice courante et celle en paramètre,
+     * aucune n'est modifiée mais le résultat est renvoyée sous forme d'une nouvelle matrice.
+     *
+     * @param m Matrice avec laquelle réaliser la somme matriciel.
+     *
+     * @return Nouvelle matrice contenant le résultat de la somme.
+     *
+     * @throw std::invalid_argument si les dimensions ne permettent pas le calcul.
+     */
+    Matrix operator+(const Matrix& m) const;
+
   private:
     double *content;
     size_t width;
