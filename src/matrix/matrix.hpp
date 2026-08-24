@@ -106,6 +106,15 @@ class Matrix {
     Matrix operator*(const Matrix& m) const;
 
     /**
+     * @brief Multiplie une matrice par un scalaire.
+     *
+     * @param a scalaire à multiplier avec la matrice courante.
+     *
+     * @return matrice résultante de la multiplication.
+     */
+    Matrix operator*(double a) const;
+
+    /**
      * @brief Calcul la somme de deux matrices.
      *
      * Surcharge l'opérateur `+` pour pouvoir calculer `result = A + B`.

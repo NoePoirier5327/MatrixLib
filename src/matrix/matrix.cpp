@@ -107,6 +107,17 @@ Matrix Matrix::operator*(const Matrix& m) const {
   return result;
 }
 
+Matrix Matrix::operator*(double a) const {
+  Matrix result = Matrix(this->width, this->height);
+
+  size_t total_size = this->width * this->height;
+  for (size_t i = 0; i < total_size; ++i) {
+    result.content[i] = this->content[i] * a;
+  }
+
+  return result;
+}
+
 Matrix Matrix::operator+(const Matrix& m) const {
   if (this->width != m.width || this->height != m.height) {
     throw std::invalid_argument("Invalid dimensions for matrice sum.");

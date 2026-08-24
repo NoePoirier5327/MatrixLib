@@ -74,6 +74,21 @@ TEST(MatrixTest, ProductWithIdentity) {
   EXPECT_EQ(I * A, A);
 }
 
+TEST(MatrixTest, ProductWithScalar) {
+  double a = 8.0f; // Scalaire
+  Matrix A = Matrix(5, 7);
+  Matrix B = Matrix(5, 7);
+
+  for (size_t i = 0; i < A.get_width(); ++i) {
+    for (size_t j = 0; j < A.get_height(); ++j) {
+      A(i, j) = static_cast<double>(i + j);
+      B(i, j) = static_cast<double>(i + j) * a;
+    }
+  }
+
+  EXPECT_EQ(A * a, B);
+}
+
 TEST(MatrixTest, AssignMatrices) {
   Matrix A = Matrix(8, 1);
   Matrix B = Matrix(5, 19);
