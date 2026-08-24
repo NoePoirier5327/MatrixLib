@@ -1,4 +1,6 @@
 CXX = g++
+AR = ar
+ARFLAGS = rcs
 LDDIR = 
 LDFLAGS =
 TESTFLAGS = -lgtest -lgtest_main -lpthread
@@ -23,7 +25,7 @@ TESTAPP = bin/run_tests
 # On exclut main.o lors de la liaison des tests
 OBJ_NO_MAIN = $(filter-out $(OBJDIR)/main.o, $(OBJ))
 
-.PHONY: all run clean debug doc init test
+.PHONY: all run clean debug doc init lib test
 
 # Compilation du binaire simple
 all: $(OBJ)
@@ -34,17 +36,24 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) $(DEBUGFLAGS) -c $(INCLDDIR) $< -o $@
 
-# Compilation du binaire de test avec GTest
-$(OBJDIR)/$(TESTDIR)/%.o: $(TESTDIR)/%.cpp
-	@mkdir -p $(dir $@)
-	$(CXX) $(CXXFLAGS) $(DEBUGFLAGS) $(INCLDDIR) -c $< -o $@
+# Compilation du binaire en tant que librairie.
+$(LIB): $(OBJ_NO_MAIN)
+	@mkdir -p bin
+	$(AR) $(ARFLAGS) $@ $^
 
+# Compilation du binaire de test avec GTest
 $(TESTAPP): $(OBJ_NO_MAIN) $(TESTOBJ)
 	@mkdir -p bin
 	$(CXX) $(LDDIR) -o $@ $^ $(BINFLAGS) $(CXXFLAGS) $(LDFLAGS) $(TESTFLAGS)
 
+$(OBJDIR)/$(TESTDIR)/%.o: $(TESTDIR)/%.cpp
+	@mkdir -p $(dir $@)
+	$(CXX) $(CXXFLAGS) $(DEBUGFLAGS) $(INCLDDIR) -c $< -o $@
+
 run: 
 	$(APP)
+
+lib: $(LIB)
 
 test: $(TESTAPP)
 	$(TESTAPP)
