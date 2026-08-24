@@ -1,7 +1,7 @@
 #ifndef MATRIX_HEADER
 #define MATRIX_HEADER
 
-#include <stdlib.h>
+#include <cstddef>
 
 /**
  * @class Matrix
@@ -23,6 +23,20 @@ class Matrix {
      * @brief Détruit la matrice courante.
      */
     ~Matrix();
+
+    /**
+     * @brief Accesseur de la largeur de la matrice courante.
+     *
+     * @return Copie de la largeur de la matrice courante.
+     */
+    size_t get_width() const;
+
+    /**
+     * @brief Accesseur de la hauteur de la matrice courante.
+     *
+     * @return Copie de la hauteur de la matrice courante.
+     */
+    size_t get_height() const;
 
     /**
      * @brief Accesseur/Mutateur de la matrice courante.
@@ -47,6 +61,19 @@ class Matrix {
      * @throw std::out_of_range si x et/ou y n'est pas accessible.
      */
     double operator()(size_t x, size_t y) const;
+
+    /**
+     * @brief Calcul le produit matriciel entre celle courante et celle en paramètre.
+     *
+     * Surcharge l'opérateur `*` pour pouvoir calculer `matrice = A * B`
+     *
+     * @param m Matrice avec laquelle réaliser le produit matricel.
+     *
+     * @return Matrice résultante du produit.
+     *
+     * @throw std::invalid_argument si les dimensions ne permettent pas le produit matriciel.
+     */
+    Matrix operator*(const Matrix& m) const;
 
   private:
     double *content;

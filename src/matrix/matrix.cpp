@@ -20,6 +20,14 @@ Matrix::~Matrix() {
   }
 }
 
+size_t Matrix::get_width() const {
+  return this->width;
+}
+
+size_t Matrix::get_height() const {
+  return this->height;
+}
+
 double& Matrix::operator()(size_t x, size_t y) {
   if (x < this->width) {
     throw std::out_of_range("X index is out of range.");
@@ -42,4 +50,23 @@ double Matrix::operator()(size_t x, size_t y) const {
   }
 
   return this->content[y * this->width + x];
+}
+
+// TODO Trouver une version plus optimisée que O(n^3)
+Matrix Matrix::operator*(const Matrix& m) const {
+  if (this->height != m.width) {
+    throw std::invalid_argument("Invalid dimensions for matrice product.");
+  }
+
+  Matrix result = Matrix(this->width, m.height);
+
+  for (size_t i = 0; i < this->width; ++i) {
+    for (size_t j = 0; j < m.height; ++j) {
+      for (size_t k = 0; k < this->height; ++k) {
+        result(i, j) += (*this)(i, k) * m(k, j);
+      }
+    }
+  }
+
+  return result;
 }
