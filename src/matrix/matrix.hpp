@@ -63,6 +63,17 @@ class Matrix {
     double operator()(size_t x, size_t y) const;
 
     /**
+     * @brief Comparateur de deux matrices.
+     *
+     * @param m Seconde matrice à comparer.
+     *
+     * @return true si elle sont identique, false sinon
+     *
+     * @note si les deux matrices ont des dimensions différentes, alors, la comparaison renvoie faux.
+     */
+    bool operator==(const Matrix& m) const;
+
+    /**
      * @brief Calcul le produit matriciel entre celle courante et celle en paramètre.
      *
      * Surcharge l'opérateur `*` pour pouvoir calculer `matrice = A * B`

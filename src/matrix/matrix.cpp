@@ -52,6 +52,22 @@ double Matrix::operator()(size_t x, size_t y) const {
   return this->content[y * this->width + x];
 }
 
+bool Matrix::operator==(const Matrix& m) const {
+  if (this->width != m.width || this->height != m.height) {
+    return false;
+  }
+
+  bool is_equal = true;
+
+  for (size_t i = 0; i < this->width; ++i) {
+    for (size_t j = 0; j < this->height; ++j) {
+      is_equal = ((*this)(i, j) == m(i, j)) | is_equal;
+    }
+  }
+
+  return is_equal;
+}
+
 // TODO Trouver une version plus optimisée que O(n^3)
 Matrix Matrix::operator*(const Matrix& m) const {
   if (this->height != m.width) {
