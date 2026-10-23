@@ -9,7 +9,7 @@ DEBUGFLAGS = -g
 CXXFLAGS = -std=c++17 -pedantic -Wfatal-errors -Wconversion -Wredundant-decls -Wshadow -Wall -Wextra
 BINFLAGS =
 
-LIB = bin/libmatrix.a
+LIB = lib/libmatrix.a
 APP = bin/matrix
 SRCDIR = src
 SRC = $(shell find $(SRCDIR) -name "*.cpp")
@@ -53,7 +53,7 @@ $(OBJDIR)/$(TESTDIR)/%.o: $(TESTDIR)/%.cpp
 run: 
 	$(APP)
 
-lib: $(LIB)
+lib: clean $(LIB)
 
 test: $(TESTAPP)
 	$(TESTAPP)
