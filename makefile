@@ -1,15 +1,16 @@
 CXX = g++
 AR = ar
 ARFLAGS = rcs
-LDDIR = 
-LDFLAGS =
+DEFAULT_LDFLAGS = 
+LDFLAGS = 
 TESTFLAGS = -lgtest -lgtest_main -lpthread
-INCLDDIR = -Iinclude
-DEBUGFLAGS = -g
-CXXFLAGS = -std=c++17 -pedantic -Wfatal-errors -Wconversion -Wredundant-decls -Wshadow -Wall -Wextra
+DEFAULT_CXXFLAGS = -std=c++17 -pedantic -Wfatal-errors -Wconversion -Wredundant-decls -Wshadow -Wall -Wextra
+CXXFLAGS = 
+INCLUDE_DIR = 
 BINFLAGS =
 
-LIB = lib/libmatrix.a
+CXXLIB = lib/libmatrix.a
+LUALIB = lua/matrix.so
 APP = bin/matrix
 SRCDIR = src
 SRC = $(shell find $(SRCDIR) -name "*.cpp")
@@ -24,44 +25,71 @@ TESTAPP = bin/run_tests
 
 # On exclut main.o lors de la liaison des tests
 OBJ_NO_MAIN = $(filter-out $(OBJDIR)/main.o, $(OBJ))
+OBJ_LUA_LIB = $(filter-out $(OBJDIR)/main.o, $(OBJ))
+OBJ_WITHOUT_LUA = $(filter-out $(OBJDIR)/lua.o, $(OBJ))
+OBJ_CXX_LIB = $(filter-out $(OBJDIR)/main.o $(OBJDIR)/lua.o, $(OBJ))
+OBJ_TEST = $(filter-out $(OBJDIR)/main.o $(OBJDIR)/lua.o, $(OBJ))
 
-.PHONY: all run clean debug doc init lib test
+.PHONY: all run clean debug doc init lib test release
 
 # Compilation du binaire simple
-all: $(OBJ)
+all: CXXFLAGS := $(DEFAULT_CXXFLAGS)
+all: LDFLAGS := $(DEFAULT_LDFLAGS)
+all: $(APP)
+
+$(APP): $(OBJ_WITHOUT_LUA)
 	@mkdir -p bin
-	$(CXX) $(LDDIR) -o $(APP) $^ $(BINFLAGS) $(CXXFLAGS) $(LDFLAGS)
+	$(CXX) -o $(APP) $^ $(BINFLAGS) $(CXXFLAGS) $(LDFLAGS)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 	@mkdir -p $(dir $@)
-	$(CXX) $(CXXFLAGS) $(DEBUGFLAGS) -c $(INCLDDIR) $< -o $@
+	$(CXX) $(CXXFLAGS) -c $(INCLUDE_DIR) $< -o $@
 
 # Compilation du binaire en tant que librairie.
-$(LIB): $(OBJ_NO_MAIN)
-	@mkdir -p bin
+$(CXXLIB): $(OBJ_CXX_LIB)
+	@mkdir -p lib
+	@rm -rR include
+	@mkdir -p include
+	cp -rR $(SRCDIR)/matrix/ include
+	find include -type f -name "*.cpp" -delete
 	$(AR) $(ARFLAGS) $@ $^
 
+$(LUALIB): $(OBJ_LUA_LIB)
+	@mkdir -p lua
+	$(CXX) -o $@ $^ $(LDFLAGS)
+
 # Compilation du binaire de test avec GTest
-$(TESTAPP): $(OBJ_NO_MAIN) $(TESTOBJ)
+$(TESTAPP): $(OBJ_TEST) $(TESTOBJ)
 	@mkdir -p bin
-	$(CXX) $(LDDIR) -o $@ $^ $(BINFLAGS) $(CXXFLAGS) $(LDFLAGS) $(TESTFLAGS)
+	$(CXX) -o $@ $^ $(BINFLAGS) $(CXXFLAGS) $(LDFLAGS) $(TESTFLAGS)
 
 $(OBJDIR)/$(TESTDIR)/%.o: $(TESTDIR)/%.cpp
 	@mkdir -p $(dir $@)
-	$(CXX) $(CXXFLAGS) $(DEBUGFLAGS) $(INCLDDIR) -c $< -o $@
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 run: 
 	$(APP)
 
-lib: clean $(LIB)
+lib: CXXFLAGS := $(DEFAULT_CXXFLAGS) -DNDEBUG
+lib: LDFLAGS := $(DEFAULT_LDFLAGS)
+lib: clean $(CXXLIB) test
 
-test: $(TESTAPP)
+lua: INCLUDE_DIR := -I/usr/include/lua5.4
+lua: LDFLAGS := $(DEFAULT_LDFLAGS) -shared -llua5.4
+lua: CXXFLAGS := $(DEFAULT_CXXFLAGS) -DNDEBUG -fPIC
+lua: clean $(LUALIB) test
+
+test: CXXFLAGS := $(DEFAULT_CXXFLAGS) -g
+test: INCLUDE_DIR := 
+test: LDFLAGS := $(DEFAULT_LDFLAGS)
+test: clean $(TESTAPP)
 	$(TESTAPP)
 
 clean:
 	find $(OBJDIR) -type f -name "*.o" -delete
 
-debug:
+debug: CXXFLAGS += -g -DDEBUG
+debug: clean $(APP)
 	gdb $(APP)
 
 doc:
