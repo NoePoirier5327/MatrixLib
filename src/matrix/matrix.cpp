@@ -51,27 +51,27 @@ size_t Matrix::get_height() const {
 }
 
 double& Matrix::operator()(size_t x, size_t y) {
-  if (x >= this->width) {
+  if (x > this->width || x < 1) {
     throw std::out_of_range("X index is out of range.");
   }
 
-  if (y >= this->height) {
+  if (y > this->height || y < 1) {
     throw std::out_of_range("Y index is out of range.");
   }
 
-  return this->content[y * this->width + x];
+  return this->content[(y - 1) * this->width + (x - 1)];
 }
 
 double Matrix::operator()(size_t x, size_t y) const {
-  if (x >= this->width) {
+  if (x > this->width || x < 1) {
     throw std::out_of_range("X index is out of range.");
   }
 
-  if (y >= this->height) {
+  if (y > this->height || y < 1) {
     throw std::out_of_range("Y index is out of range.");
   }
 
-  return this->content[y * this->width + x];
+  return this->content[(y - 1) * this->width + (x - 1)];
 }
 
 bool Matrix::operator==(const Matrix& m) const {
@@ -96,9 +96,9 @@ Matrix Matrix::operator*(const Matrix& m) const {
 
   Matrix result = Matrix(this->width, m.height);
 
-  for (size_t i = 0; i < this->width; ++i) {
-    for (size_t j = 0; j < m.height; ++j) {
-      for (size_t k = 0; k < this->height; ++k) {
+  for (size_t i = 1; i <= this->width; ++i) {
+    for (size_t j = 1; j <= m.height; ++j) {
+      for (size_t k = 1; k <= this->height; ++k) {
         result(i, j) += (*this)(i, k) * m(k, j);
       }
     }
@@ -186,7 +186,7 @@ void Matrix::display() const {
 Matrix new_identity_matrix(size_t n) {
   Matrix I = Matrix(n, n);
 
-  for (size_t i = 0; i < n; ++i) {
+  for (size_t i = 1; i <= n; ++i) {
     I(i, i) = 1.0f;
   }
 

@@ -65,7 +65,7 @@ class Matrix {
      *
      * @return référence vers la valeur qu'on a voulu récupérer.
      *
-     * @throw std::out_of_range si x et/ou y n'est pas accessible.
+     * @throw std::out_of_range si x > width ou x < 1 ou y > height ou y < 1.
      */
     double& operator()(size_t x, size_t y);
 
@@ -77,7 +77,7 @@ class Matrix {
      *
      * @return copie de la valeur à la position en paramètre.
      *
-     * @throw std::out_of_range si x et/ou y n'est pas accessible.
+     * @throw std::out_of_range si x > width ou x < 1 ou y > height ou y < 1.
      */
     double operator()(size_t x, size_t y) const;
 
