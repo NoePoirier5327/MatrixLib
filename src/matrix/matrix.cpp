@@ -2,6 +2,7 @@
 
 #include <stdexcept>
 #include <iostream>
+#include <iomanip>
 
 Matrix::Matrix(size_t nb_line, size_t nb_col) {
   this->_nb_col = nb_col;
@@ -154,7 +155,7 @@ void Matrix::display() const {
       std::cout << std::endl;
     }
 
-    std::cout << this->_content[i] << " ";
+    std::cout << std::fixed << std::setprecision(6) << this->_content[i] << " ";
   }
 
   std::cout << std::endl;
