@@ -71,7 +71,7 @@ TEST(MatrixTest, ProductWithIdentity) {
 }
 
 TEST(MatrixTest, ProductWithScalar) {
-  double a = 8.0f; // Scalaire
+  int a = 8; // Scalaire
   Matrix A = Matrix(5, 7);
   Matrix B = Matrix(5, 7);
 
@@ -83,6 +83,7 @@ TEST(MatrixTest, ProductWithScalar) {
   }
 
   EXPECT_EQ(A * a, B);
+  EXPECT_EQ(a * A, B);
 }
 
 TEST(MatrixTest, AssignMatrices) {
