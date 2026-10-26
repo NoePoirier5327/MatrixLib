@@ -14,10 +14,10 @@ class Matrix {
      *
      * Elle l'initialise avec des 0.
      *
-     * @param width largeur de la matrice à créer.
-     * @param height hauteur de la matrice à créer.
+     * @param nb_line, nombre de ligne dans la matrice à créer.
+     * @param nb_col, nombre de colonnes dans la matrice à créer.
      */
-    Matrix(size_t width, size_t height);
+    Matrix(size_t nb_line, size_t nb_col);
 
     /**
      * @brief Constructeur de copie
@@ -48,38 +48,38 @@ class Matrix {
      *
      * @return Copie de la largeur de la matrice courante.
      */
-    size_t get_width() const;
+    size_t get_nb_col() const;
 
     /**
      * @brief Accesseur de la hauteur de la matrice courante.
      *
      * @return Copie de la hauteur de la matrice courante.
      */
-    size_t get_height() const;
+    size_t get_nb_line() const;
 
     /**
      * @brief Accesseur/Mutateur de la matrice courante.
      * 
-     * @param x ligne de la matrice à récupérer.
-     * @param y colonne de la matrice à récupérer.
+     * @param line, ligne de la matrice à récupérer.
+     * @param col, colonne de la matrice à récupérer.
      *
      * @return référence vers la valeur qu'on a voulu récupérer.
      *
-     * @throw std::out_of_range si x > width ou x < 1 ou y > height ou y < 1.
+     * @throw std::out_of_range si line > _nb_line ou line < 1 ou col > _nb_col ou col < 1.
      */
-    double& operator()(size_t x, size_t y);
+    double& operator()(size_t line, size_t col);
 
     /**
      * @brief Accesseur de la matrice courante.
      *
-     * @param x ligne de la matrice à récupérer.
-     * @param y colonne de la matrice à récupérer.
+     * @param line, ligne de la matrice à récupérer.
+     * @param col, colonne de la matrice à récupérer.
      *
      * @return copie de la valeur à la position en paramètre.
      *
-     * @throw std::out_of_range si x > width ou x < 1 ou y > height ou y < 1.
+     * @throw std::out_of_range si line > _nb_line ou line < 1 ou col > _nb_col ou col < 1.
      */
-    double operator()(size_t x, size_t y) const;
+    double operator()(size_t line, size_t col) const;
 
     /**
      * @brief Comparateur de deux matrices.
@@ -150,9 +150,22 @@ class Matrix {
     void display() const;
 
   private:
-    double *content;
-    size_t width;
-    size_t height;
+    /**
+     * @brief Transforme la coordonnée matricielle en deux dimensions en une dimmension.
+     *
+     * @param line, index de la ligne à laquelle accéder.
+     * @param col, index de la colonnne à laquelle accéder.
+     *
+     * @return index dans _content correspondant à la coordonnée en paramètres.
+     *
+     * @throw std::invalid_argument si line > _nb_line ou line < 1
+     * @throw std::invalid_argument si col > _nb_col ou col < 1
+     */
+    size_t to_linear_coordinate(size_t line, size_t col) const;
+
+    double *_content;
+    size_t _nb_line;
+    size_t _nb_col;
 };
 
 /**
