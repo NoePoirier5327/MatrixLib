@@ -106,6 +106,30 @@ class Matrix {
     Matrix operator*(const Matrix& m) const;
 
     /**
+     * @brief Surcharge *= pour le produit matriciel.
+     *
+     * Effectue le produit matriciel entre la matrice courante
+     * et celle en paramètre.
+     * Stocke le résultat du produit dans la matrice courante.
+     *
+     * @param m, matrice avec laquelle effectuer le produit matriciel.
+     *
+     * @throw std::invalid_argument si les dimensions ne permettent pas le produit matriciel.
+     */
+    void operator*=(const Matrix &m);
+
+    /**
+     * @brief Surcharge *= pour le produit entre une matrice et un scalaire.
+     *
+     * Effectue le produit entre la matrice courante et le 
+     * scalaire en paramètre.
+     * Stocke le résultat du produit dans la matrice courante.
+     *
+     * @param a, scalaire par lequel multiplier la matrice courante.
+     */
+    void operator*=(double a);
+
+    /**
      * @brief Calcul la somme de deux matrices.
      *
      * Surcharge l'opérateur `+` pour pouvoir calculer `result = A + B`.
@@ -119,6 +143,18 @@ class Matrix {
      * @throw std::invalid_argument si les dimensions ne permettent pas le calcul.
      */
     Matrix operator+(const Matrix& m) const;
+
+    /**
+     * @brief Surcharge l'opérateur +=.
+     *
+     * Fais la somme entre la matrice en paramètre et celle
+     * courante et stocke le résultat dans la matrice courante.
+     *
+     * @param m, matrice à ajouter à celle courante.
+     *
+     * @throw std::invalid_argument si les dimensions ne permettent pas le calcul.
+     */
+    void operator+=(const Matrix &m);
 
     /**
      * @brief Copie la matrice en paramètre dans la matrice courante.

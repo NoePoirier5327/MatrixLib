@@ -94,6 +94,14 @@ Matrix Matrix::operator*(const Matrix& m) const {
   return result;
 }
 
+void Matrix::operator*=(const Matrix &m) {
+  (*this) = (*this) * m;
+}
+
+void Matrix::operator*=(double a) {
+  (*this) = (*this) * a;
+}
+
 Matrix Matrix::operator+(const Matrix& m) const {
   if (this->get_nb_line() != m.get_nb_line() || this->get_nb_col() != m.get_nb_col()) {
     throw std::invalid_argument("Invalid dimensions for matrice sum.");
@@ -107,6 +115,10 @@ Matrix Matrix::operator+(const Matrix& m) const {
   }
 
   return result;
+}
+
+void Matrix::operator+=(const Matrix &m) {
+  (*this) = (*this) + m;
 }
 
 Matrix& Matrix::operator=(const Matrix& m) {
