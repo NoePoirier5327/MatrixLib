@@ -181,6 +181,11 @@ class Matrix {
     Matrix& operator=(Matrix&& m) noexcept;
 
     /**
+     * @brief Renvoie la transposée de la matrice courante.
+     */
+    Matrix transpose() const;
+
+    /**
      * @brief Affiche la matrice courante.
      */
     void display() const;
