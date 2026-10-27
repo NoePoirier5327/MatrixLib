@@ -160,6 +160,16 @@ Matrix& Matrix::operator=(Matrix&& m) noexcept {
   return *this;
 }
 
+Matrix Matrix::transpose() const {
+  Matrix m = Matrix(this->_nb_col, this->_nb_line);
+
+  for (size_t i = 1; i <= m.get_nb_line(); ++i)
+    for (size_t j = 1; j <= m.get_nb_col(); ++j)
+      m(i, j) = (*this)(j, i);
+
+  return m;
+}
+
 void Matrix::display() const {
   size_t total_size = this->_nb_line * this->_nb_col;
   for (size_t i = 0; i < total_size; ++i) {

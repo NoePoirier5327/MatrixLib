@@ -97,3 +97,17 @@ TEST(MatrixTest, AssignMatrices) {
   A = B;
   EXPECT_EQ(A, B);
 }
+
+TEST(MatrixTest, Transpose) {
+  Matrix A = Matrix(2, 3);
+  Matrix B = Matrix(3, 2);
+
+  for (int i = 1; i <= 3; ++i) {
+    A(1, i) = i;
+    A(2, i) = i + 3;
+    B(i, 1) = i;
+    B(i, 2) = i + 3;
+  }
+
+  EXPECT_EQ(A.transpose(), B);
+}
