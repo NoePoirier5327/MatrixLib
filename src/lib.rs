@@ -174,6 +174,32 @@ impl Matrix {
         result
     }
 
+    /// Version optimisée de la multiplication de la matrice courante avec la transposée de celle en
+    /// paramètre.
+    ///
+    /// # Argument
+    /// * `m` matrice dont la transposée est à multiplier avec celle courante.
+    ///
+    /// # Return
+    /// Résultat de la multiplication avec la transposée.
+    pub fn multiplication_with_transposed(&self, m: &Matrix) -> Matrix {
+        assert_eq!(self.get_nb_col(), m.get_nb_col(), "Having the same number of columns is required for multiplication with transposed.");
+
+        let mut result = Matrix::new(self.get_nb_line(), m.get_nb_line());
+        for i in 1..=result.get_nb_line() {
+            for j in 1..=result.get_nb_col() {
+                for k in 1..=self.get_nb_col() {
+                    let rindex = result.to_linear_coordinate(i, j);
+                    let sindex = self.to_linear_coordinate(i, k);
+                    let mindex = m.to_linear_coordinate(j, k);
+                    result.content[rindex] += self.content[sindex] * m.content[mindex];
+                }
+            }
+        }
+        
+        result
+    }
+
     /// Calcul et renvoie l'index dans content des indexs line et col.
     /// L'indexation de line et col commence à 1 et non 0, lève une erreur si ce n'est pas respecté.
     #[inline]
@@ -389,5 +415,24 @@ mod tests {
 
         let c = a.tranpose() * b.clone();
         assert_eq!(Matrix::transposed_multiplication(&a, &b), c);
+    }
+
+    #[test]
+    fn multiplication_with_transposed() {
+        let mut a = Matrix::new_square(2);
+        let mut b = Matrix::new(3, 2);
+
+        for i in 1..=3 {
+            b.set(i, 1, i as f64);
+            b.set(i, 2, (i + 3) as f64);
+        }
+
+        for i in 1..=2 {
+            a.set(1, i, i as f64);
+            a.set(2, i, (i + 2) as f64);
+        }
+
+        let c = a.clone() * b.tranpose();
+        assert_eq!(Matrix::multiplication_with_transposed(&a, &b), c);
     }
 }
