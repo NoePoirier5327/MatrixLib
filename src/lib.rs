@@ -37,11 +37,7 @@ impl Matrix {
     /// # Return
     /// Instance vers la nouvelle matrice carrée remplie de 0f64.
     pub fn new_square(size: usize) -> Self {
-        Self {
-            nb_line: size,
-            nb_col: size,
-            content: vec![0f64; size * size]
-        }
+        Self::new(size, size)
     }
 
     /// Construit une nouvelle matrice identité de la taille en paramètre.
