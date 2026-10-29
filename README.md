@@ -1,5 +1,3 @@
-# MatrixLib
-Une librairie de calcul matriciel en c++.
+# Pokin
+Une librairie de calcul matriciel en rust accessible depuis rust et lua.
 
-## Dépendances
-Pour la création de documentation, il faut utiliser le logiciel Doxygen et pour exécuter les tests unitaires il faut avoir la librairie GTest pour c++.
