@@ -127,23 +127,22 @@ impl Matrix {
         }
     }
 
-    /// Multiplie les deux matrices en paramètres termes à termes et renvoie le résultat dans une
-    /// nouvelle matrice.
+    /// Multiplie la matrice en paramètre termes à termes avec la matrice courante et renvoie
+    /// le résultat dans une nouvelle matrice.
     ///
     /// # Arguments
-    /// * `a` matrice à multiplier avec l'autre matrice en paramètre.
-    /// * `b` matrice à multiplier avec l'autre matrice en paramètre.
+    /// * `a` matrice à multiplier avec la matrice courante
     ///
     /// # Return
     /// Résultat de la multiplication termes à termes des deux matrices en paramètres.
-    pub fn elementwise_multiplication(a: &Matrix, b: &Matrix) -> Matrix {
-        assert_eq!(a.get_nb_line(), b.get_nb_line(), "The matrices should have the same sizes to multiply them.");
-        assert_eq!(a.get_nb_col(), b.get_nb_col(), "The matrices should have the same sizes to multiply them.");
+    pub fn elementwise_multiplication(&self, a: &Matrix) -> Matrix {
+        assert_eq!(a.get_nb_line(), self.get_nb_line(), "The matrices should have the same sizes to multiply them.");
+        assert_eq!(a.get_nb_col(), self.get_nb_col(), "The matrices should have the same sizes to multiply them.");
 
         let mut m = Matrix::new(a.get_nb_line(), a.get_nb_col());
         let total_size = m.get_nb_line() * m.get_nb_col();
         for i in 0..total_size {
-            m.content[i] = a.content[i] * b.content[i];
+            m.content[i] = a.content[i] * self.content[i];
         }
 
         m
