@@ -20,6 +20,8 @@ impl Matrix {
     /// # Return
     /// Instance vers la nouvelle matrice remplie de 0f64.
     pub fn new(nb_line: usize, nb_col: usize) -> Self {
+        assert!(nb_line >= 1 && nb_col >= 1, "You can't create a matrix that has no line or column.");
+
         Self {
             nb_line,
             nb_col,
