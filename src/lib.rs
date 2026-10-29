@@ -127,9 +127,30 @@ impl Matrix {
         }
     }
 
+    /// Multiplie les deux matrices en paramètres termes à termes et renvoie le résultat dans une
+    /// nouvelle matrice.
+    ///
+    /// # Arguments
+    /// * `a` matrice à multiplier avec l'autre matrice en paramètre.
+    /// * `b` matrice à multiplier avec l'autre matrice en paramètre.
+    ///
+    /// # Return
+    /// Résultat de la multiplication termes à termes des deux matrices en paramètres.
+    pub fn elementwise_multiplication(a: &Matrix, b: &Matrix) -> Matrix {
+        assert_eq!(a.get_nb_line(), b.get_nb_line(), "The matrices should have the same sizes to multiply them.");
+        assert_eq!(a.get_nb_col(), b.get_nb_col(), "The matrices should have the same sizes to multiply them.");
+
+        let mut m = Matrix::new(a.get_nb_line(), a.get_nb_col());
+        let total_size = m.get_nb_line() * m.get_nb_col();
+        for i in 0..total_size {
+            m.content[i] = a.content[i] * b.content[i];
+        }
+
+        m
+    }
+
     /// Calcul et renvoie l'index dans content des indexs line et col.
-    /// L'indexation de line et col commence à 1 et non 0, lève une erreur
-    /// si ce n'est pas respecté.
+    /// L'indexation de line et col commence à 1 et non 0, lève une erreur si ce n'est pas respecté.
     #[inline]
     fn to_linear_coordinate(&self, line: usize, col: usize) -> usize {
         assert!(line >= 1 && line <= self.nb_line, "Line index out of range.");
@@ -293,6 +314,22 @@ mod tests {
 
         a *= b;
         assert_eq!(a, c);
+    }
+
+    #[test]
+    fn elementwise_multiplication() {
+        let mut a = Matrix::new(3, 2);
+        let mut c = Matrix::new(3, 2);
+
+        for i in 1..=3 {
+            a.set(i, 1, i as f64);
+            a.set(i, 2, (i + 3) as f64);
+            c.set(i, 1, (i * i) as f64);
+            c.set(i, 2, ((i + 3) * (i + 3)) as f64);
+        }
+
+        let b = a.clone();
+        assert_eq!(Matrix::elementwise_multiplication(&a, &b), c);
     }
 
     #[test]
