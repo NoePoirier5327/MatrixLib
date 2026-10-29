@@ -130,7 +130,7 @@ impl Matrix {
     /// Multiplie la matrice en paramètre termes à termes avec la matrice courante et renvoie
     /// le résultat dans une nouvelle matrice.
     ///
-    /// # Arguments
+    /// # Argument
     /// * `a` matrice à multiplier avec la matrice courante
     ///
     /// # Return
@@ -146,6 +146,32 @@ impl Matrix {
         }
 
         m
+    }
+
+    /// Version optimisée du produit d'une matrice et de sa transposée.
+    /// La matrice courante sera celle transposée et elle sera multpliée avec celle en paramètre.
+    ///
+    /// # Argument
+    /// * `a` matrice à multiplier avec la transposée de la matrice courante.
+    ///
+    /// # Return
+    /// Résultat du produit entre la transposée de la matrice courante et de la matrice en paramètre.
+    pub fn transposed_multiplication(&self, a: &Matrix) -> Matrix {
+        assert_eq!(self.get_nb_line(), a.get_nb_line(), "Having the same number of lines is required for transposed multiplication.");
+
+        let mut result = Matrix::new(self.get_nb_col(), a.get_nb_col());
+        for i in 1..=result.get_nb_line() {
+            for j in 1..=result.get_nb_col() {
+                for k in 1..=self.get_nb_line() {
+                    let rindex = result.to_linear_coordinate(i, j);
+                    let sindex = self.to_linear_coordinate(k, i);
+                    let aindex = a.to_linear_coordinate(k, j);
+                    result.content[rindex] += self.content[sindex] * a.content[aindex];
+                }
+            }
+        }
+
+        result
     }
 
     /// Calcul et renvoie l'index dans content des indexs line et col.
@@ -344,5 +370,24 @@ mod tests {
         }
 
         assert_eq!(a.tranpose(), b);
+    }
+
+    #[test]
+    fn transposed_multiplication() {
+        let mut a = Matrix::new(2, 3);
+        let mut b = Matrix::new_square(2);
+
+        for i in 1..=3 {
+            a.set(1, i, i as f64);
+            a.set(2, i, (i + 3) as f64);
+        }
+
+        for i in 1..=2 {
+            b.set(1, i, i as f64);
+            b.set(2, i, (i + 2) as f64);
+        }
+
+        let c = a.tranpose() * b.clone();
+        assert_eq!(Matrix::transposed_multiplication(&a, &b), c);
     }
 }
