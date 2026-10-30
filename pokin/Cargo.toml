@@ -3,4 +3,9 @@ name = "pokin"
 version.workspace = true
 edition.workspace = true
 
+[lib]
+name = "pokin"
+path = "src/lib.rs"
+crate-type = ["rlib"]
+
 [dependencies]
