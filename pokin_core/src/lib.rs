@@ -230,6 +230,25 @@ impl Add for Matrix {
     }
 }
 
+/// Surcharge de l'opérateur + pour la somme de références de matrices.
+/// Lève une erreur si elles n'ont pas la même taille.
+impl Add for &Matrix {
+    type Output = Matrix;
+    fn add(self, m: &Matrix) -> Matrix {
+        assert!(self.get_nb_line() == m.get_nb_line(), "Invalid dimensions for matrix sum.");
+        assert!(self.get_nb_col() == m.get_nb_col(), "Invalid dimensions for matrix sum.");
+
+        let mut result = Matrix::new(self.get_nb_line(), self.get_nb_col());
+        let total_size = result.get_nb_line() * result.get_nb_col();
+
+        for i in 0..total_size {
+            result.content[i] = self.content[i] + m.content[i];
+        }
+
+        result
+    }
+}
+
 /// Surcharge de l'opérateur += pour la somme de deux matrices.
 /// Lève une erreur si elles n'ont pas la même taille.
 /// Le résultat de la somme est stocké dans la matrice à gauche de l'opérateur.
@@ -258,6 +277,25 @@ impl Mul for Matrix {
             for j in 1..=result.nb_col {
                 for k in 1..=self.nb_col {
                     result.set(i, j, result.get(i, j) + (self.get(i, k) * m.get(k, j)));
+                }
+            }
+        }
+
+        result
+    }
+}
+
+impl Mul for &Matrix {
+    type Output = Matrix;
+
+    fn mul(self, m: &Matrix) -> Matrix {
+        assert_eq!(self.get_nb_col(), m.get_nb_line(), "Invalid dimensions for matrix product.");
+
+        let mut result = Matrix::new(self.get_nb_line(), m.get_nb_col());
+        for i in 1..=result.get_nb_line() {
+            for j in 1..=result.get_nb_col() {
+                for k in 1..=self.get_nb_col() {
+                    result.set(i, j, result.get(i, j) + (self.get(i, j) * m.get(k, j)));
                 }
             }
         }
