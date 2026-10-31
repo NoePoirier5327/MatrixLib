@@ -1,13 +1,13 @@
 [package]
-name = "lua_bindings"
+name = "pokin_lua"
 version.workspace = true
 edition.workspace = true
 
 [lib]
-name = "lua_bindings"
+name = "pokin_lua"
 path = "src/lib.rs"
 crate-type = ["cdylib"]
 
 [dependencies]
-pokin = { path = "../pokin/" }
+pokin_core = { path = "../pokin_core/" }
 mlua = { version = "0.12.2", features = ["lua54", "module"] }

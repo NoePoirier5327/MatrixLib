@@ -2,10 +2,12 @@
 name = "pokin"
 version.workspace = true
 edition.workspace = true
+authors.workspace = true
 
-[lib]
-name = "pokin"
-path = "src/lib.rs"
-crate-type = ["rlib"]
+[features]
+default = []
+lua = ["dep:pokin_lua"]
 
 [dependencies]
+pokin_core = { path = "../pokin_core" }
+pokin_lua = { path = "../pokin_lua", optional = true }

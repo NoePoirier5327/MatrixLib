@@ -1,7 +1,8 @@
 [workspace]
 members = [
-  "pokin",
-  "lua_bindings"
+  "pokin_core",
+  "pokin_lua",
+  "pokin"
 ]
 resolver = "2"
 

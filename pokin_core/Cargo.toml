@@ -1,0 +1,11 @@
+[package]
+name = "pokin_core"
+version.workspace = true
+edition.workspace = true
+
+[lib]
+name = "pokin_core"
+path = "src/lib.rs"
+crate-type = ["rlib"]
+
+[dependencies]
