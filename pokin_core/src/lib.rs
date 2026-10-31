@@ -285,6 +285,8 @@ impl Mul for Matrix {
     }
 }
 
+/// Surcharge de l'opérateur * pour le produit matriciel des références.
+/// Lève une erreur si self.nb_col != m.nb_line
 impl Mul for &Matrix {
     type Output = Matrix;
 
